@@ -3,9 +3,16 @@ import pandas as pd
 
 def get_artist_and_song(title):
     """ Separate ARTIST and TITLE from "Watched ARTIST - TITLE" strings """
-    split = title.split("-")
-    artist, song_name = split[0], split[1]
+    artist, song_name = title[8:], title[:8]
     return (artist, song_name)
+
+#===================================================================================
+
+def check_validity(title):
+    if title[:7] != "Watched":
+        return False
+
+#===================================================================================
 
 def main(args):
 
@@ -18,9 +25,11 @@ def main(args):
     selected_data = data.loc[data["header"] == "YouTube Music"]
 
     for entry in selected_data["title"]:
+        if not check_validity(entry):
+            continue
         artist, song = get_artist_and_song(entry)
-        print(artist)
-        print(song)
+        #print(artist)
+        #print(song)
 
 
 #===================================================================================
