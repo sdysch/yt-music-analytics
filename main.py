@@ -1,11 +1,27 @@
 import json
 import pandas as pd
 
+def get_artist_and_song(title):
+    """ Separate ARTIST and TITLE from "Watched ARTIST - TITLE" strings """
+    split = title.split("-")
+    artist, song_name = split[0], split[1]
+    return (artist, song_name)
+
 def main(args):
 
+    # read json into pandas dataframe
     with open(args.input) as f:
-        data = json.load(f)
-    print(data)
+        data = pd.read_json(args.input)
+    #print(data)
+
+    # only keep data entries which were from YouTube Music, not YouTube
+    selected_data = data.loc[data["header"] == "YouTube Music"]
+
+    for entry in selected_data["title"]:
+        artist, song = get_artist_and_song(entry)
+        print(artist)
+        print(song)
+
 
 #===================================================================================
 
